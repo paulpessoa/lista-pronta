@@ -1,101 +1,181 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import React, { useState, useEffect } from 'react';
+import { LogIn, Share2, Lock, Unlock, Plus, Trash2, Edit } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+// import { Alert, AlertDescription } from '@/components/ui/alert';
+
+const ShoppingList = () => {
+  const [lists, setLists] = useState(() => {
+    const savedLists = window.localStorage.getItem('shopping-lists');
+    return savedLists ? JSON.parse(savedLists) : [];
+  });
+  const [newListName, setNewListName] = useState('');
+  const [newItem, setNewItem] = useState('');
+  const [selectedList, setSelectedList] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('shopping-lists', JSON.stringify(lists));
+  }, [lists]);
+
+  const createList = () => {
+    if (!newListName.trim()) return;
+    const newList = {
+      id: Date.now(),
+      name: newListName,
+      items: [],
+      isPublic: false,
+      createdAt: new Date().toISOString()
+    };
+    setLists([...lists, newList]);
+    setNewListName('');
+  };
+
+  const addItem = (listId) => {
+    if (!newItem.trim()) return;
+    setLists(lists.map(list => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          items: [...list.items, { id: Date.now(), name: newItem, completed: false }]
+        };
+      }
+      return list;
+    }));
+    setNewItem('');
+  };
+
+  const toggleItemComplete = (listId, itemId) => {
+    setLists(lists.map(list => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          items: list.items.map(item =>
+            item.id === itemId ? { ...item, completed: !item.completed } : item
+          )
+        };
+      }
+      return list;
+    }));
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="max-w-4xl mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Prio List</h1>
+        {!isAuthenticated && (
+          <Button onClick={() => setIsAuthenticated(true)} className="flex items-center gap-2">
+            <LogIn className="w-4 h-4" />
+            Login
+          </Button>
+        )}
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+      {/* Create New List */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Criar Nova Lista</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2">
+            <Input
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              placeholder="Nome da nova lista"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Button onClick={createList}>
+              <Plus className="w-4 h-4 mr-2" />
+              Criar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Lists */}
+      <div className="space-y-4">
+        {lists.map(list => (
+          <Card key={list.id}>
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <CardTitle>{list.name}</CardTitle>
+                <div className="flex gap-2">
+                  {isAuthenticated && (
+                    <>
+                      <Button variant="outline" size="icon">
+                        <Share2 className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          setLists(lists.map(l =>
+                            l.id === list.id ? { ...l, isPublic: !l.isPublic } : l
+                          ));
+                        }}
+                      >
+                        {list.isPublic ? (
+                          <Unlock className="w-4 h-4" />
+                        ) : (
+                          <Lock className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {/* Add Item Form */}
+              <div className="flex gap-2 mb-4">
+                <Input
+                  value={newItem}
+                  onChange={(e) => setNewItem(e.target.value)}
+                  placeholder="Adicionar item"
+                />
+                <Button onClick={() => addItem(list.id)}>
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Items List */}
+              <ul className="space-y-2">
+                {list.items.map(item => (
+                  <li
+                    key={item.id}
+                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded"
+                  >
+                    <div className="flex items-center gap-2">
+                      <input
+                        title='Marcar como concluído'
+                        type="checkbox"
+                        checked={item.completed}
+                        onChange={() => toggleItemComplete(list.id, item.id)}
+                        className="w-4 h-4"
+                      />
+                      <span className={item.completed ? 'line-through text-gray-500' : ''}>
+                        {item.name}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="icon">
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
-}
+};
+
+export default ShoppingList;
