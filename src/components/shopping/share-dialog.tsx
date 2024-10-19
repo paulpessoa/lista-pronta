@@ -16,18 +16,19 @@ import { Label } from '@/components/ui/label';
 import { SharePermissions } from './types';
 
 interface ShareDialogProps {
-  listId: number;
+  listId: string;
   listName: string;
   onShare: (email: string, permissions: SharePermissions) => void;
 }
 
 export function ShareDialog({ listId, listName, onShare }: ShareDialogProps) {
-    console.log('ShareDialogProps', listId, listName, onShare);
+  console.log('ShareDialogProps', listId, listName, onShare);
   const [email, setEmail] = useState('');
   const [permissions, setPermissions] = useState<SharePermissions>({
-    canEdit: true,
-    canDelete: false,
-    canShare: false,
+    can_edit: true,
+    can_delete: false,
+    can_share: false,
+    can_comment: false,
   });
 
   const handleShare = () => {
@@ -50,7 +51,7 @@ export function ShareDialog({ listId, listName, onShare }: ShareDialogProps) {
             Compartilhe {`"${listName}"`} com outras pessoas
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -62,46 +63,56 @@ export function ShareDialog({ listId, listName, onShare }: ShareDialogProps) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label>Permissões</Label>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="edit"
-                  checked={permissions.canEdit}
-                  onCheckedChange={(checked) => 
-                    setPermissions(p => ({...p, canEdit: checked === true}))
+                  checked={permissions.can_edit}
+                  onCheckedChange={(checked) =>
+                    setPermissions(p => ({ ...p, can_edit: checked === true }))
                   }
                 />
                 <label htmlFor="edit">Pode editar itens</label>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="delete"
-                  checked={permissions.canDelete}
-                  onCheckedChange={(checked) => 
-                    setPermissions(p => ({...p, canDelete: checked === true}))
+                  checked={permissions.can_delete}
+                  onCheckedChange={(checked) =>
+                    setPermissions(p => ({ ...p, can_delete: checked === true }))
                   }
                 />
                 <label htmlFor="delete">Pode excluir itens</label>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="share"
-                  checked={permissions.canShare}
-                  onCheckedChange={(checked) => 
-                    setPermissions(p => ({...p, canShare: checked === true}))
+                  checked={permissions.can_share}
+                  onCheckedChange={(checked) =>
+                    setPermissions(p => ({ ...p, can_share: checked === false }))
                   }
                 />
                 <label htmlFor="share">Pode compartilhar</label>
               </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="comment"
+                  checked={permissions.can_comment}
+                  onCheckedChange={(checked) =>
+                    setPermissions(p => ({ ...p, can_comment: checked === true }))
+                  }
+                />
+                <label htmlFor="comment">Pode comentar</label>
+              </div>
             </div>
           </div>
         </div>
-        
+
         <Button onClick={handleShare} className="w-full">
           Compartilhar
         </Button>
