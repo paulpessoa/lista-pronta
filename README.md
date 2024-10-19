@@ -14,6 +14,28 @@ pnpm dev
 bun dev
 ```
 
+## Project Structure
+
+├── app/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── providers/
+│   │   ├── AuthProvider.tsx
+│   │   └── theme-provider.tsx
+│   ├── ui/
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   └── input.tsx
+│   └── shopping-list.tsx
+├── lib/
+│   └── supabase.ts
+├── tailwind.config.js
+└── next.config.js
+
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
