@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Share2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { SharePermissions } from './types';
 
 interface ShareDialogProps {
   listId: number;
@@ -21,6 +22,7 @@ interface ShareDialogProps {
 }
 
 export function ShareDialog({ listId, listName, onShare }: ShareDialogProps) {
+    console.log('ShareDialogProps', listId, listName, onShare);
   const [email, setEmail] = useState('');
   const [permissions, setPermissions] = useState<SharePermissions>({
     canEdit: true,
@@ -45,7 +47,7 @@ export function ShareDialog({ listId, listName, onShare }: ShareDialogProps) {
         <DialogHeader>
           <DialogTitle>Compartilhar Lista</DialogTitle>
           <DialogDescription>
-            Compartilhe "{listName}" com outras pessoas
+            Compartilhe {`"${listName}"`} com outras pessoas
           </DialogDescription>
         </DialogHeader>
         

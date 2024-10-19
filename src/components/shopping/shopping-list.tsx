@@ -8,8 +8,8 @@ import { Input } from '@/components/ui/input';
 import { LogIn, Lock, Unlock, Plus, Trash2 } from 'lucide-react';
 import { CreateListForm } from './create-list-form';
 import { ListItem } from './list-item';
+import type { ShoppingList, SharePermissions } from './types';
 import { ShareDialog } from './share-dialog';
-import type { ShoppingList, ShoppingItem, SharePermissions } from './types';
 
 export function ShoppingList() {
   const [lists, setLists] = useState<ShoppingList[]>(() => {
