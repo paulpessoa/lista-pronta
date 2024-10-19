@@ -17,8 +17,8 @@ export default function VerifyEmailPage() {
                     </p>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Link href="/login">
-                        <Button variant="outline">Voltar para login</Button>
+                    <Link href="/">
+                        <Button variant="outline">Voltar para página inicial</Button>
                     </Link>
                 </CardFooter>
             </Card>

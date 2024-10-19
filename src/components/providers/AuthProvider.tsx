@@ -41,25 +41,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
     // router.push('/dashboard') // Redirecionar após login
-    router.push('/') // Redirecionar após login
+    router.push('/')
   }
 
   const signInWithOtp = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({ email })
     if (error) throw error
-    // router.push('/dashboard') // Redirecionar após login
-    router.push('/verify-email') // Redirecionar após login
+    // router.push('/dashboard')
+    router.push('/verify-email')
   }
 
   const signUp = async (email: string, password: string) => {
     const { error } = await supabase.auth.signUp({ email, password })
     if (error) throw error
-    // Opcional: enviar para página de verificação de email
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
-    router.push('/') // Redirecionar para home
+    router.push('/')
   }
 
   return (

@@ -23,6 +23,7 @@ export const useShoppingLists = () => {
 
         if (!error && data) {
           setListsShop(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             data.map((list: any) => ({ ...list, user_id: user.id }))
           );
         }
@@ -54,7 +55,7 @@ export const useShoppingLists = () => {
 
     const syncInterval = setInterval(async () => {
       await handleSync();
-    }, 1 * 60 * 1000); // 2 minutos
+    }, 2 * 60 * 1000); // 2 minutos
 
     return () => clearInterval(syncInterval);
   }, [user, lastChange]);
@@ -173,7 +174,7 @@ export const useShoppingLists = () => {
         if (list.id === listId) {
           return {
             ...list,
-            items: list.items.map((item) =>
+            items: (list?.items || []).map((item) =>
               item.id === itemId
                 ? { ...item, completed: !item.completed }
                 : item
@@ -191,7 +192,7 @@ export const useShoppingLists = () => {
         if (list.id === listId) {
           return {
             ...list,
-            items: list.items.filter((item) => item.id !== itemId),
+            items: (list?.items || []).filter((item) => item.id !== itemId),
           };
         }
         return list;
