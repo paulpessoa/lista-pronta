@@ -25,12 +25,21 @@ bun dev
 │   │   ├── AuthProvider.tsx
 │   │   └── theme-provider.tsx
 │   ├── ui/
+│   │   └── alert.tsx
 │   │   ├── button.tsx
 │   │   ├── card.tsx
+│   │   └── checkbox.tsx
+│   │   └── dialog.tsx
 │   │   └── input.tsx
-│   └── shopping-list.tsx
+│   │   └── label.tsx
+│   └── shopping/
+│   │   ├── create-list-form.tsx
+│   │   ├── list-item.tsx
+│   │   └── share-dialog.tsx
+│   │   └── types.ts
 ├── lib/
 │   └── supabase.ts
+│   └── utils.ts
 ├── tailwind.config.js
 └── next.config.js
 
