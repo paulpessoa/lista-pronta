@@ -45,7 +45,7 @@ export default function Page() {
             {user ? (
               <Button variant="ghost" onClick={() => router.push('/lists')}>
                 <ClipboardList className="w-4 h-4" />
-                Minhas Listas</Button>
+                Listas</Button>
             ) :
               
              (
