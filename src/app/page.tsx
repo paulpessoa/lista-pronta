@@ -11,11 +11,11 @@ import {
 } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { LogIn, LogOut } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 
 export default function Page() {
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user} = useAuth();
 
   const [isDark, setIsDark] = useState(false);
 
@@ -42,17 +42,13 @@ export default function Page() {
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
-            {user && (
+            {user ? (
               <Button variant="ghost" onClick={() => router.push('/lists')}>
                 <ClipboardList className="w-4 h-4" />
                 Minhas Listas</Button>
-            )}
-            {user ? (
-              <Button onClick={signOut} className="flex items-center gap-2" variant="ghost">
-                <LogOut className="w-4 h-4" />
-                Sair
-              </Button>
-            ) : (
+            ) :
+              
+             (
               <Button onClick={() => router.push('/login')}>
                 <LogIn className="w-4 h-4" />
 
