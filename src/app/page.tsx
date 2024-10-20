@@ -56,7 +56,7 @@ export default function Page() {
               <Button onClick={() => router.push('/login')}>
                 <LogIn className="w-4 h-4" />
 
-                Acessar versão Web</Button>
+                Acessar</Button>
             )}
 
 
