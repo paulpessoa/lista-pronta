@@ -6,32 +6,34 @@ import type { ShoppingList } from "@/components/shopping/types";
 export const useShoppingLists = () => {
   const { user } = useAuth();
   const [listsShop, setListsShop] = useState<ShoppingList[]>([]);
-  const [lastChange, setLastChange] = useState<Date | null>(null);
-  const [isSyncing, setIsSyncing] = useState(false);
 
   // Carregar listas iniciais
   useEffect(() => {
     const loadInitialLists = async () => {
       if (user) {
-        // Carregar do Supabase se estiver logado
+        // Carregar listas próprias e compartilhadas
         const { data, error } = await supabase
           .from("lists_shopping")
           .select(
-            `id, name, created_at, is_public, items: list_items (*, list_id)`
+            `
+            id, 
+            name, 
+            created_at, 
+            is_public,
+            user_id,
+            items: list_items (*)
+          `
           )
-          .eq("user_id", user.id);
+          .or(`user_id.eq.${user.id},is_public.eq.true`);
 
         if (!error && data) {
-          setListsShop(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            data.map((list: any) => ({ ...list, user_id: user.id }))
+          // Organiza as listas em próprias e compartilhadas
+          const ownLists = data.filter((list) => list.user_id === user.id);
+          const sharedLists = data.filter(
+            (list) => list.user_id !== user.id && list.is_public
           );
-        }
-      } else {
-        // Carregar do localStorage se não estiver logado
-        const savedLists = localStorage.getItem("lists_shopping_local");
-        if (savedLists) {
-          setListsShop(JSON.parse(savedLists));
+
+          setListsShop([...ownLists, ...sharedLists]);
         }
       }
     };
@@ -44,51 +46,7 @@ export const useShoppingLists = () => {
     if (!user) {
       localStorage.setItem("list_shopping_local", JSON.stringify(listsShop));
     }
-    if (listsShop.length > 0) {
-      setLastChange(new Date());
-    }
   }, [listsShop, user]);
-
-  // Sincronização automática a cada 2 minutos quando houver mudanças
-  useEffect(() => {
-    if (!user || !lastChange) return;
-
-    const syncInterval = setInterval(async () => {
-      await handleSync();
-    }, 2 * 60 * 1000); // 2 minutos
-
-    return () => clearInterval(syncInterval);
-  }, [user, lastChange]);
-
-  const handleSync = async () => {
-    if (!user || isSyncing) return;
-
-    try {
-      setIsSyncing(true);
-
-      // Preparar dados para sincronização
-      const listsWithUserId = listsShop.map((list) => ({
-        ...list,
-        user_id: user.id,
-      }));
-
-      // Upsert das listas
-      const { error } = await supabase
-        .from("lists_shopping")
-        .upsert(listsWithUserId, {
-          onConflict: "id",
-          ignoreDuplicates: false,
-        });
-
-      if (error) throw error;
-
-      setLastChange(null);
-    } catch (error) {
-      console.error("Erro na sincronização:", error);
-    } finally {
-      setIsSyncing(false);
-    }
-  };
 
   // Criar a lista
   const createList = async (name: string) => {
@@ -137,13 +95,6 @@ export const useShoppingLists = () => {
       console.error("Erro ao adicionar item:", error);
       return;
     }
-
-    // Atualizar o estado local
-    // setListsShop((prev) =>
-    //   prev.map((list) =>
-    //     list.id === listId ? { ...list, items: [...list.items, newItem] } : list
-    //   )
-    // );
 
     setListsShop((prev) =>
       prev.map((list) =>
@@ -214,7 +165,6 @@ export const useShoppingLists = () => {
 
   return {
     listsShop,
-    isSyncing,
     createList,
     getListItems,
     addItem,
@@ -222,6 +172,5 @@ export const useShoppingLists = () => {
     deleteItem,
     deleteList,
     toggleListPublic,
-    handleSync,
   };
 };

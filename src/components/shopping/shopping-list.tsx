@@ -1,4 +1,3 @@
-// components/shopping/ShoppingList.tsx
 'use client';
 
 import { useState } from 'react';
@@ -8,7 +7,7 @@ import { useShoppingLists } from '@/hooks/useShoppingLists';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LogIn, Lock, Unlock, Plus, Trash2, LogOut, RefreshCcw } from 'lucide-react';
+import { LogIn, Lock, Unlock, Plus, Trash2, LogOut } from 'lucide-react';
 import { CreateListForm } from './create-list-form';
 import { ListItem } from './list-item';
 import { ShareDialog } from './share-dialog';
@@ -21,14 +20,12 @@ export function ShoppingList() {
 
   const {
     listsShop,
-    isSyncing,
     createList,
     addItem,
     toggleItemComplete,
     deleteItem,
     deleteList,
     toggleListPublic,
-    handleSync
   } = useShoppingLists();
 
   const handleShare = (listId: string, email: string, permissions: SharePermissions) => {
@@ -62,20 +59,6 @@ export function ShoppingList() {
           </div>
         )}
       </div>
-
-      {user && (
-        <div className="flex justify-end">
-          <Button className="flex items-center gap-2 mb-4 "
-            onClick={handleSync}
-            variant="ghost"
-            disabled={isSyncing}
-          >
-            <RefreshCcw className="w-4 h-4" />
-
-            {isSyncing ? 'Sincronizando...' : 'Sincronizar'}
-          </Button>
-        </div>
-      )}
 
       <CreateListForm onCreateList={createList} />
 

@@ -40,14 +40,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
-    // router.push('/dashboard') // Redirecionar após login
-    router.push('/')
+    router.push('/lists')
   }
 
   const signInWithOtp = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({ email })
     if (error) throw error
-    // router.push('/dashboard')
     router.push('/verify-email')
   }
 
