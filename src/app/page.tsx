@@ -1,30 +1,8 @@
 "use client"
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers/AuthProvider';
-// import { Button } from "@/components/ui/button";
-// // import { Card, CardContent } from "@/components/ui/card";
-// import {
-//   Moon, Sun,
-//   // Facebook, Twitter, Instagram, 
-//   NotebookTabs,
-//   ClipboardList
-// } from "lucide-react";
-// import { LogIn } from 'lucide-react';
-
+import React from 'react';
+import Image from 'next/image';
 export default function Page() {
-  // const router = useRouter();
-  // const { user} = useAuth();
-
-  // const [isDark, setIsDark] = useState(false);
-
-  // Toggle dark mode by adding/removing class to html element
-  // const toggleDarkMode = () => {
-  //   const html = document.documentElement;
-  //   html.classList.toggle('dark');
-  //   setIsDark(!isDark);
-  // };
 
   return (
     <div className="min-h-screen font-sans">
@@ -39,13 +17,14 @@ export default function Page() {
                 Com o Lista Pronta, você pode criar listas de compras e compartilhá-las com pessoas da sua família, amigos e colegas de trabalho. Mantenha suas compras organizadas e otimize seu tempo no supermercado.
               </p>
             </div>
-            <div className="flex-1">
-              <img
-                src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
-                alt="Shopping"
-                className="rounded-3xl object-cover w-full aspect-video"
-              />
-            </div>
+            <Image
+              src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
+              alt="Shopping"
+              className="rounded-3xl object-cover w-full aspect-video"
+              layout="responsive"
+              width={700}
+              height={475}
+            />
           </div>
         </section>
 
