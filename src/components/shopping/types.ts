@@ -1,7 +1,7 @@
 export type ShoppingItem = {
   id: number;
   name: string;
-  completed: boolean;
+  checked: boolean;
 };
 
 export type ShoppingList = {
@@ -17,9 +17,9 @@ export type ItemByList = {
   id: string;
   name: string;
   list_id: string;
-  completed: boolean;
+  checked: boolean;
   created_at: string;
-  created_by: string;
+  owner_id: string;
 };
 
 export type SharePermissions = {

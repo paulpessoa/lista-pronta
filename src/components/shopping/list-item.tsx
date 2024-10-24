@@ -15,11 +15,11 @@ export function ListItem({ item, onToggleComplete, onDeleteItem }: ListItemProps
       <div className="flex items-center gap-2">
         <input
           type="checkbox"
-          checked={item.completed}
+          checked={item.checked}
           onChange={() => onToggleComplete(item.id)}
           className="w-4 h-4"
         />
-        <span className={`${item.completed ? 'line-through text-muted-foreground' : ''}`}>
+        <span className={`${item.checked ? 'line-through text-muted-foreground' : ''}`}>
           {item.name}
         </span>
       </div>
