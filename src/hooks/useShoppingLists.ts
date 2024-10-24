@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import type { ShoppingList } from "@/components/shopping/types";
@@ -6,72 +6,51 @@ import type { ShoppingList } from "@/components/shopping/types";
 export const useShoppingLists = () => {
   const { user } = useAuth();
   const [listsShop, setListsShop] = useState<ShoppingList[]>([]);
-
+ 
   // Carregar listas iniciais
   useEffect(() => {
     const loadInitialLists = async () => {
       if (user) {
         // Carregar listas próprias e compartilhadas
         const { data, error } = await supabase
-          .from("lists_shopping")
-          .select(
-            `
-            id, 
-            name, 
-            created_at, 
-            is_public,
-            user_id,
-            items: list_items (*)
-          `
-          )
-          .or(`user_id.eq.${user.id},is_public.eq.true`);
+          .from("lists")
+          .select("*")
 
-        if (!error && data) {
-          // Organiza as listas em próprias e compartilhadas
-          const ownLists = data.filter((list) => list.user_id === user.id);
-          const sharedLists = data.filter(
-            (list) => list.user_id !== user.id && list.is_public
-          );
-
-          setListsShop([...ownLists, ...sharedLists]);
+        if (error) {
+          console.log("ERRO", error);
         }
+        if (data) {
+          console.log("data", data);
+          setListsShop(data);
+        }
+      
       }
     };
 
     loadInitialLists();
-  }, [user]);
-
-  // Salvar no localStorage quando não estiver logado
-  useEffect(() => {
-    if (!user) {
-      localStorage.setItem("list_shopping_local", JSON.stringify(listsShop));
-    }
-  }, [listsShop, user]);
+  }, []);
 
   // Criar a lista
-  const createList = async (name: string) => {
-    if (!user) return;
+  const createList = async (listName: string) => {
+    // Obtém o usuário logado
+    const { data: user, error: userError } = await supabase.auth.getUser();
 
-    const { data: newList, error } = await supabase
-      .from("lists_shopping")
-      .insert([
-        {
-          name,
-          user_id: user?.id ? user.id : null,
-          created_by: user.id,
-          is_public: false,
-        },
-      ])
-      .select()
-      .single();
+    if (userError) {
+      console.error("Erro ao obter usuário:", userError);
+      return { success: false, error: userError.message };
+    }
+
+    // Insere uma nova lista no banco de dados
+    const { data, error } = await supabase
+      .from("lists")
+      .insert([{ name: listName, owner_id: user.user.id }]);
 
     if (error) {
       console.error("Erro ao criar lista:", error);
-      return;
+      return { success: false, error: error.message };
     }
 
-    // Adicionar a nova lista ao estado com array vazio de items
-    setListsShop((prev) => [...prev, { ...newList, items: [] }]);
+    return { success: true, data };
   };
 
   // Adicionar Item
@@ -84,8 +63,7 @@ export const useShoppingLists = () => {
         {
           list_id: listId,
           name: itemName,
-          completed: false,
-          created_by: user.id,
+          checked: false,
         },
       ])
       .select()
@@ -127,7 +105,7 @@ export const useShoppingLists = () => {
             ...list,
             items: (list?.items || []).map((item) =>
               item.id === itemId
-                ? { ...item, completed: !item.completed }
+                ? { ...item, checked: !item.checked }
                 : item
             ),
           };

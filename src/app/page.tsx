@@ -1,65 +1,33 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-// import { Card, CardContent } from "@/components/ui/card";
-import {
-  Moon, Sun,
-  // Facebook, Twitter, Instagram, 
-  NotebookTabs,
-  ClipboardList
-} from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { LogIn } from 'lucide-react';
+// import { Button } from "@/components/ui/button";
+// // import { Card, CardContent } from "@/components/ui/card";
+// import {
+//   Moon, Sun,
+//   // Facebook, Twitter, Instagram, 
+//   NotebookTabs,
+//   ClipboardList
+// } from "lucide-react";
+// import { LogIn } from 'lucide-react';
 
 export default function Page() {
-  const router = useRouter();
-  const { user} = useAuth();
+  // const router = useRouter();
+  // const { user} = useAuth();
 
-  const [isDark, setIsDark] = useState(false);
+  // const [isDark, setIsDark] = useState(false);
 
   // Toggle dark mode by adding/removing class to html element
-  const toggleDarkMode = () => {
-    const html = document.documentElement;
-    html.classList.toggle('dark');
-    setIsDark(!isDark);
-  };
+  // const toggleDarkMode = () => {
+  //   const html = document.documentElement;
+  //   html.classList.toggle('dark');
+  //   setIsDark(!isDark);
+  // };
 
   return (
     <div className="min-h-screen font-sans">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center justify-between px-8">
-          <div className="flex items-center text-2xl font-bold">
-            <NotebookTabs className="mr-2" />
-            Lista Pronta</div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleDarkMode}
-            >
-              <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
-            {user ? (
-              <Button variant="ghost" onClick={() => router.push('/lists')}>
-                <ClipboardList className="w-4 h-4" />
-                Listas</Button>
-            ) :
-              
-             (
-              <Button onClick={() => router.push('/login')}>
-                <LogIn className="w-4 h-4" />
-
-                Acessar</Button>
-            )}
-
-
-          </div>
-        </div>
-      </header>
-
       <main className="flex-1">
         <section className="container p-12 md:py-24 lg:py-32">
           <div className="flex flex-col md:flex-row items-center gap-8">
