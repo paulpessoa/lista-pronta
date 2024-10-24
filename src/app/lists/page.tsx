@@ -15,7 +15,7 @@ export default function ListsPage() {
       }
     };
     checkUser();
-  }, [router]);
+  }, [router, user]);
 
   if (loading) {
     return <p>Loading...</p>;
