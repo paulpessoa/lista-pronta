@@ -19,18 +19,15 @@ export default function Header() {
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        const storedTheme = localStorage.getItem('theme');
-        if (storedTheme) {
-            setIsDark(storedTheme === 'dark');
-            document.documentElement.classList.toggle('dark', storedTheme === 'dark');
-        }
+      const storedTheme = localStorage.getItem('theme');
+      setIsDark(storedTheme !== 'dark');
+      document.documentElement.classList.toggle('dark', storedTheme === 'dark');
     }, []);
-
+  
     const toggleDarkMode = () => {
-        const html = document.documentElement;
-        html.classList.toggle('dark');
-        setIsDark(!isDark);
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      setIsDark(!isDark);
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark');
     };
 
 
