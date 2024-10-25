@@ -9,7 +9,7 @@ export default function Page() {
       <main className="flex-1">
         <section className="container mx-auto p-12 md:py-24 lg:py-32">
           <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1 space-y-4">
+            <div className="xl:flex-1 space-y-4 md:order-1 order-2">
               <h1 className="text-4xl font-bold tracking-tighter pb-4 sm:text-5xl md:text-6xl lg:text-7xl">
                 Crie e compartilhe suas listas facilmente
               </h1>
@@ -17,14 +17,16 @@ export default function Page() {
                 Com o Lista Pronta, você pode criar listas de compras e compartilhá-las com pessoas da sua família, amigos e colegas de trabalho. Mantenha suas compras organizadas e otimize seu tempo no supermercado.
               </p>
             </div>
-            <Image
-              src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
-              alt="Shopping"
-              className="rounded-3xl object-cover w-full aspect-video"
-              layout="responsive"
-              width={700}
-              height={475}
-            />
+            <div className="xl:flex-1 md:order-2 order-1">
+              <Image
+                src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
+                alt="Shopping"
+                className="rounded-3xl object-cover w-full aspect-video"
+                layout="responsive"
+                width={700}
+                height={475}
+              />
+            </div>
           </div>
         </section>
 
