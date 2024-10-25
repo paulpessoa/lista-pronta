@@ -1,56 +1,49 @@
-import { useEffect, useState } from "react";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 import type { ShoppingList } from "@/components/shopping/types";
+import { useEffect, useState } from "react";
 
 export const useShoppingLists = () => {
   const { user } = useAuth();
-  const [listsShop, setListsShop] = useState<ShoppingList[]>([]);
- 
-  // Carregar listas iniciais
-  useEffect(() => {
-    const loadInitialLists = async () => {
-      if (user) {
-        // Carregar listas próprias e compartilhadas
+  const [lists, setLists] = useState([]);
+  const getLists = async () => {
+    if (user) {
+      try {
         const { data, error } = await supabase
           .from("lists")
-          .select("*")
+          .select(`id, name, created_at, items: list_items (*, list_id)`); // No .maybeSingle()
 
         if (error) {
-          console.log("ERRO", error);
+          console.error("Error fetching lists:", error);
+          // Handle error appropriately (e.g., display an error message to the user)
+        } else {
+          return data as ShoppingList[];
         }
-        if (data) {
-          console.log("data", data);
-          setListsShop(data);
-        }
-      
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        // Handle unexpected errors
       }
-    };
-
-    loadInitialLists();
-  }, []);
+    }
+  };
 
   // Criar a lista
   const createList = async (listName: string) => {
-    // Obtém o usuário logado
-    const { data: user, error: userError } = await supabase.auth.getUser();
-
-    if (userError) {
-      console.error("Erro ao obter usuário:", userError);
-      return { success: false, error: userError.message };
-    }
+    if (!user) return { success: false, error: "Usuário não autenticado" };
 
     // Insere uma nova lista no banco de dados
     const { data, error } = await supabase
       .from("lists")
-      .insert([{ name: listName, owner_id: user.user.id }]);
+      .insert([{ name: listName, owner_id: user.id }])
+      .select();
 
     if (error) {
       console.error("Erro ao criar lista:", error);
       return { success: false, error: error.message };
     }
 
-    return { success: true, data };
+    getLists();
+
+    return { success: true, data: data[0] };
   };
 
   // Adicionar Item
@@ -74,15 +67,10 @@ export const useShoppingLists = () => {
       return;
     }
 
-    setListsShop((prev) =>
-      prev.map((list) =>
-        list.id === listId
-          ? { ...list, items: [...(list.items ?? []), newItem] }
-          : list
-      )
-    );
+    await getLists();
   };
 
+  // Obter itens da lista
   const getListItems = async (listId: string) => {
     const { data: listItems, error } = await supabase
       .from("list_items")
@@ -94,61 +82,76 @@ export const useShoppingLists = () => {
       return;
     }
 
+    // Atualizar o estado local com os itens da lista
+    getLists();
+
     return listItems;
   };
 
-  const toggleItemComplete = (listId: string, itemId: number) => {
-    setListsShop((prev) =>
-      prev.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: (list?.items || []).map((item) =>
-              item.id === itemId
-                ? { ...item, checked: !item.checked }
-                : item
-            ),
-          };
-        }
-        return list;
-      })
-    );
+  // Alternar item completo
+  const toggleItemChecked = async (
+    list_id: string,
+    id: string,
+    value: boolean
+  ) => {
+    if (!id) return;
+
+    const { error } = await supabase
+      .from("list_items")
+      .update({ checked: value })
+      .eq("id", id)
+      .eq("list_id", list_id)
+      .select();
+
+    if (error) {
+      console.error("Erro ao alternar item:", error);
+      return;
+    }
+
+    // Atualizar o estado local
+    getLists();
   };
 
-  const deleteItem = (listId: string, itemId: number) => {
-    setListsShop((prev) =>
-      prev.map((list) => {
-        if (list.id === listId) {
-          return {
-            ...list,
-            items: (list?.items || []).filter((item) => item.id !== itemId),
-          };
-        }
-        return list;
-      })
-    );
+  // Deletar item
+  const deleteItem = async (id: string) => {
+    const { error } = await supabase.from("list_items").delete().eq("id", id);
+
+    if (error) {
+      console.error("Erro ao deletar item:", error);
+      return;
+    }
   };
 
-  const deleteList = (listId: string) => {
-    setListsShop((prev) => prev.filter((list) => list.id !== listId));
+  // Deletar lista
+  const deleteList = async (listId: string) => {
+    const { error } = await supabase.from("lists").delete().eq("id", listId);
+
+    if (error) {
+      console.error("Erro ao deletar lista:", error);
+      return;
+    }
   };
 
-  const toggleListPublic = (listId: string) => {
-    setListsShop((prev) =>
-      prev.map((list) =>
-        list.id === listId ? { ...list, isPublic: !list.is_public } : list
-      )
-    );
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const lista = await getLists();
+        setLists(lista);
+      } catch (error) {
+        console.error("Erro ao buscar listas:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return {
-    listsShop,
+    lists,
     createList,
     getListItems,
     addItem,
-    toggleItemComplete,
+    toggleItemChecked,
     deleteItem,
     deleteList,
-    toggleListPublic,
+    getLists,
   };
 };
