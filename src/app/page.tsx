@@ -1,6 +1,11 @@
 import React from 'react';
 
+"use client"
+
+import React from 'react';
+import Image from 'next/image';
 export default function Page() {
+
   return (
     <div className="min-h-screen font-sans">
       <main className="flex-1">
@@ -14,13 +19,14 @@ export default function Page() {
                 Com o Lista Pronta, você pode criar listas de compras e compartilhá-las com pessoas da sua família, amigos e colegas de trabalho. Mantenha suas compras organizadas e otimize seu tempo no supermercado.
               </p>
             </div>
-            <div className="flex-1">
-              <img
-                src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
-                alt="Shopping"
-                className="rounded-3xl object-cover w-full aspect-video"
-              />
-            </div>
+            <Image
+              src="/images/happy-young-company-smiling-friends-sitting-park-using-smartphones-man-women-having-fun-together_285396-8744.jpg"
+              alt="Shopping"
+              className="rounded-3xl object-cover w-full aspect-video"
+              layout="responsive"
+              width={700}
+              height={475}
+            />
           </div>
         </section>
 

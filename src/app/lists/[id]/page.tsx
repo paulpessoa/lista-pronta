@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
-// app/lists/[id]/page.tsx
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 interface ListProps {

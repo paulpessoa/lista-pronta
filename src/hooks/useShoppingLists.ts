@@ -28,7 +28,7 @@ export const useShoppingLists = () => {
     };
 
     loadInitialLists();
-  }, []);
+  }, [user]);
 
   // Criar a lista
   const createList = async (listName: string) => {
