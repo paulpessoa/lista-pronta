@@ -1,5 +1,6 @@
 "use client"
-import React, { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import {
     Moon, Sun,
     NotebookTabs,
@@ -7,10 +8,9 @@ import {
     ClipboardList,
 } from "lucide-react";
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers/AuthProvider';
 import { LogIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
+import { useAuth } from '@/components/providers/AuthProvider';
 
 
 export default function Header() {
@@ -18,12 +18,22 @@ export default function Header() {
     const { user, signOut, loading } = useAuth();
     const [isDark, setIsDark] = useState(false);
 
-    // Toggle dark mode by adding/removing class to html element
+    useEffect(() => {
+        const storedTheme = localStorage.getItem('theme');
+        if (storedTheme) {
+            setIsDark(storedTheme === 'dark');
+            document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+        }
+    }, []);
+
     const toggleDarkMode = () => {
         const html = document.documentElement;
         html.classList.toggle('dark');
         setIsDark(!isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
     };
+
+
 
     return (
         <div className="font-sans">

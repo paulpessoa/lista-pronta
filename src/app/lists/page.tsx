@@ -10,7 +10,7 @@ export default function ListsPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      if (!user) {
+      if (user?.authenticated === false) {
         router.push('/login');
       }
     };

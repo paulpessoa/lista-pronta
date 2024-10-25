@@ -2,10 +2,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { User } from '@supabase/supabase-js'
+import { UserAppMetadata } from '@supabase/supabase-js'
 
 interface AuthContextType {
-  user: User | null
+  user: UserAppMetadata | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
   signInWithOtp: (email: string) => Promise<void>
@@ -17,7 +17,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<UserAppMetadata | null>(null)
   const [loading, setLoading] = useState(true)
 
 
