@@ -97,7 +97,7 @@ export const useShoppingLists = () => {
     return listItems;
   };
 
-  const toggleItemComplete = (listId: string, itemId: number) => {
+  const toggleItemComplete = (listId: string, itemId: string) => {
     setListsShop((prev) =>
       prev.map((list) => {
         if (list.id === listId) {
@@ -115,7 +115,7 @@ export const useShoppingLists = () => {
     );
   };
 
-  const deleteItem = (listId: string, itemId: number) => {
+  const deleteItem = (listId: string, itemId: string) => {
     setListsShop((prev) =>
       prev.map((list) => {
         if (list.id === listId) {

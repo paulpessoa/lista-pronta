@@ -5,8 +5,8 @@ import type { ShoppingItem } from './types';
 
 interface ListItemProps {
   item: ShoppingItem;
-  onToggleComplete: (itemId: number) => void;
-  onDeleteItem: (itemId: number) => void;
+  onToggleComplete: (itemId: string) => void;
+  onDeleteItem: (itemId: string) => void;
 }
 
 export function ListItem({ item, onToggleComplete, onDeleteItem }: ListItemProps) {
