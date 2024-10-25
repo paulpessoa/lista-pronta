@@ -1,6 +1,8 @@
 export type ShoppingItem = {
-  id: number;
+  id: string;
   name: string;
+  list_id: string;
+  created_at: string;
   checked: boolean;
 };
 

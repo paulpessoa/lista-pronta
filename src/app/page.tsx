@@ -29,10 +29,10 @@ export default function Page() {
   return (
     <div className="min-h-screen font-sans">
       <main className="flex-1">
-        <section className="container p-12 md:py-24 lg:py-32">
-          <div className="flex flex-col md:flex-row items-center gap-8">
+        <section className="container mx-auto p-12 md:py-24 lg:py-32">
+          <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1 space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="text-4xl font-bold tracking-tighter pb-4 sm:text-5xl md:text-6xl lg:text-7xl">
                 Crie e compartilhe suas listas facilmente
               </h1>
               <p className="text-muted-foreground md:text-xl">
