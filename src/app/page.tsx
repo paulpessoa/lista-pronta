@@ -1,31 +1,6 @@
-"use client"
-
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers/AuthProvider';
-// import { Button } from "@/components/ui/button";
-// // import { Card, CardContent } from "@/components/ui/card";
-// import {
-//   Moon, Sun,
-//   // Facebook, Twitter, Instagram, 
-//   NotebookTabs,
-//   ClipboardList
-// } from "lucide-react";
-// import { LogIn } from 'lucide-react';
+import React from 'react';
 
 export default function Page() {
-  // const router = useRouter();
-  // const { user} = useAuth();
-
-  // const [isDark, setIsDark] = useState(false);
-
-  // Toggle dark mode by adding/removing class to html element
-  // const toggleDarkMode = () => {
-  //   const html = document.documentElement;
-  //   html.classList.toggle('dark');
-  //   setIsDark(!isDark);
-  // };
-
   return (
     <div className="min-h-screen font-sans">
       <main className="flex-1">
